@@ -16,7 +16,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from user_manager.views import get_users, get_user, post_user, update_user, delete_user
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('api/v1/admin/', admin.site.urls),
+    path("api/v1/get/", get_users),
+    path("api/v1/get/<int:pk>/", get_user),
+    path("api/v1/post/", post_user),
+    path("api/v1/patch/<int:pk>/", update_user),
+    path("api/v1/delete/<int:pk>/", delete_user),
+
+
 ]
