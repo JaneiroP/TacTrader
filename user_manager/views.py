@@ -1,5 +1,6 @@
 import json
 from django.http import JsonResponse
+from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.db import IntegrityError
 from user_manager.models import ResUsers
@@ -102,7 +103,8 @@ def delete_user(request, pk):
             return JsonResponse({'error': 'User not found'}, status=404)
     return JsonResponse({'error': 'Invalid request method'}, status=405)
 
-
+def login(request):
+    return render(request, 'login.html')
 
 
 

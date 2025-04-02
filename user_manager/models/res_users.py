@@ -1,18 +1,22 @@
 from django.db import models
-from django.contrib.auth.hashers import make_password, check_password
+from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.hashers import make_password
 
 
-class ResUsers(models.Model):
-    email = models.EmailField(unique=True)
-    password = models.CharField(max_length=128, blank=True, null=True)
-    first_name = models.CharField(max_length=30)
-    last_name = models.CharField(max_length=30)
-    is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False)
-    date_joined = models.DateTimeField(auto_now_add=True)
-
+class ResUsers(AbstractUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']
+
+    groups = models.ManyToManyField(
+        "auth.Group",
+        related_name="resusers_set",
+        blank=True
+    )
+    user_permissions = models.ManyToManyField(
+        "auth.Permission",
+        related_name="resusers_set",
+        blank=True
+    )
 
     def send(self) -> None:
         print('sending', self.email)
@@ -24,10 +28,7 @@ class ResUsers(models.Model):
         return self.email
 
     def search_by_first_name(self, first_name):
-        return ResUsers.objects.filter(last_name__icontains=first_name)
+        return ResUsers.objects.filter(first_name__icontains=first_name)
 
     def search_by_last_name(self, last_name):
         return ResUsers.objects.filter(last_name__icontains=last_name)
-
-
-
